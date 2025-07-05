@@ -14,10 +14,11 @@ CREATE TABLE orders(
 );
 
 
-CREATE TABLE users(
+CREATE TABLE users
+(
     username varchar_ignorecase(50) not null primary key,
-    passowed varchar_ignorecase(500) not null,
-    enabled boolean not null,
+    password varchar_ignorecase(500) not null,
+    enabled boolean not null
 );
 
 CREATE TABLE authorities(
