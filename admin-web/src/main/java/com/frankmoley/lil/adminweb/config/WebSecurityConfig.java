@@ -1,6 +1,9 @@
 package com.frankmoley.lil.adminweb.config;
 
-import javax.sql.DataSource; //Imported because it wont work without it
+//Imported because it wont work without it
+import javax.sql.DataSource;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 @Configuration
@@ -22,9 +23,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             .antMatchers("/", "/home").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+            .antMatchers("/customers/**").hasRole("USER")
+            .antMatchers("/orders").hasRole("ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .failureUrl("/login?error=true")
+            .permitAll()
+            .and()
+            .logout()
+            .clearAuthentication(true)
+            .invalidateHttpSession(true)
+            .logoutSuccessUrl("/login?logout")
+            .permitAll()
+
+        ;
     }
 
     @Bean
@@ -35,9 +49,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public GrantedAuthoritiesMapper authoritiesMapper() {
+        SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
+        authorityMapper.setConvertToUpperCase(true);
+        return authorityMapper;
+    }
+
+    //Removed from code as per instructions
+    /* 
+    @Bean
     public static PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+    */
+    
 
     //Removed from code as per instructions
     /*(@Override
