@@ -54,8 +54,8 @@ public class CustomerController {
         return "customers";
     }
 
-    @GetMapping(path="/{id}")
-    public String getUser(@PathVariable("id")long customerId, Principal principal, Model model){
+    @GetMapping(path = "/{id}")
+    public String getUser(@PathVariable("id") long customerId, Principal principal, Model model) {
         Optional<Customer> customer = this.customerRepository.findById(customerId);
         if (customer.isEmpty()) {
             throw new ResponseStatusException(
@@ -64,21 +64,20 @@ public class CustomerController {
         }
         model.addAttribute("customer", customer.get());
         List<Order> orders = new ArrayList<>();
-        if (principal instanceof UsernamePasswordAuthenticationToken){
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
             AtomicBoolean auth = new AtomicBoolean(false);
             Collection<GrantedAuthority> authorities = ((UsernamePasswordAuthenticationToken) principal).getAuthorities();
             authorities.forEach(authority -> {
-                    if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                        auth.set(true);
+                        if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                            auth.set(true);
+                        }
                     }
-                }
             );
             if (auth.get()) {
                 Iterable<Order> ordersIterable = this.orderRepository.findAllByCustomerId(customer.get().getId());
                 ordersIterable.forEach(orders::add);
             }
         }
-        
         model.addAttribute("orders", orders);
         model.addAttribute("module", "customers");
         return "detailed_customer";
