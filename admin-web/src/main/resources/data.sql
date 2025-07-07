@@ -10,6 +10,9 @@ INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM cu
 INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM customers where name = 'Acme'), '3000 Widgets');
 INSERT INTO orders (customer_id, order_info) values ((SELECT customer_id FROM customers where name = 'Callahan Auto'), '200 Widgets');
 
+
+--Removed as per instructions
+/*
 INSERT INTO users (username, password, enabled) 
 values ('user', '{bcrypt}$2a$10$DvP5kTSaiEeO.N.E.VAOxeKuXssBIlH4hQmBHah3EckuS3TIaVjKm', true);
 INSERT INTO users (username, password, enabled)
@@ -21,3 +24,4 @@ INSERT INTO authorities (username, authority)
 values ('admin', 'ROLE_USER');
 INSERT INTO authorities (username, authority)
 values ('admin', 'ROLE_ADMIN');
+*/

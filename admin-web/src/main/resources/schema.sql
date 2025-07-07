@@ -13,7 +13,8 @@ CREATE TABLE orders(
     foreign key (customer_id) references customers(customer_id)
 );
 
-
+--Removed as per instructions
+/*
 CREATE TABLE users
 (
     username varchar_ignorecase(50) not null primary key,
@@ -28,3 +29,4 @@ CREATE TABLE authorities(
 );
 
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
+*/
